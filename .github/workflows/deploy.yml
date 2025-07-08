@@ -10,9 +10,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: 3.13
+          enable-cache: true
+      - name: Install packages
+        run: |
+          uv pip install \
+          --target package \
+          --python-platform aarch64-manylinux_2_40 \
+          --python-version 3.13 \
+          --only-binary=:all: \
+          munch
       - name: Create Function Code
         run: |
-          zip -r9 /tmp/function.zip index.py
+          cd package
+          zip -r9 /tmp/function.zip .
+          cd ..
+          zip -g /tmp/function.zip index.py
       - name: Deploy
         uses: skaylink-stefan-heitmueller/github-action-lambda-deployment@main
         with:
