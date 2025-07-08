@@ -26,3 +26,4 @@ jobs:
           name: foo
           public-url: "true"
           environment-variables: "foo=bar,bar=foo"
+          architectures: arm64
