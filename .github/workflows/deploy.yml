@@ -1,0 +1,28 @@
+---
+name: deploy
+on:
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create Function Code
+        run: |
+          zip -r9 /tmp/lambda_function.zip index.py
+      - name: Deploy
+        uses: skaylink-stefan-heitmueller/github-action-lambda-deployment
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          zip-file: /tmp/function.zip
+          runtime: python3.13
+          handler: index.handler
+          role-arn: arn:aws:iam::066992541702:role/AWSLambdaBasicExecutionRole
+          region: eu-central-1
+          name: foo
+          public-url: "true"
+          environment-variables: "foo=bar,bar=foo"
