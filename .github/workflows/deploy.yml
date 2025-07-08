@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Create Function Code
         run: |
-          zip -r9 /tmp/lambda_function.zip index.py
+          zip -r9 /tmp/function.zip index.py
       - name: Deploy
         uses: skaylink-stefan-heitmueller/github-action-lambda-deployment@main
         with:
